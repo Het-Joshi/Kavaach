@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  csms-1.6:
+    image: python:3.10
+    volumes:
+      - ./ocpp1.6:/app
+    command: python /app/central_system16.py
+    ports:
+      - "9000:9000"
+    networks:
+      - ocpp-net
+
+  cp-1.6:
+    image: python:3.10
+    volumes:
+      - ./ocpp1.6:/app
+    command: python /app/charge_point16.py
+    depends_on:
+      - csms-1.6
+    networks:
+      - ocpp-net
+
+  csms-2.0.1:
+    image: python:3.10
+    volumes:
+      - ./ocpp2.0.1:/app
+    command: python /app/central_system201.py
+    ports:
+      - "9001:9000"
+    networks:
+      - ocpp-net
+
+  cp-2.0.1:
+    image: python:3.10
+    volumes:
+      - ./ocpp2.0.1:/app
+    command: python /app/charge_point201.py
+    depends_on:
+      - csms-2.0.1
+    networks:
+      - ocpp-net
+
+networks:
+  ocpp-net:
